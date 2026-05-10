@@ -259,7 +259,8 @@ function QueueProgress({ logId, onComplete }) {
           headers: { Authorization: `Bearer ${token}` }
         });
         setLog(res.data);
-        if (res.data.status !== 'pending') {
+        const s = res.data.status;
+        if (s === 'success' || s === 'failed' || s === 'partial') {
           // Keep it visible for a moment if successful
           setTimeout(onComplete, 3000);
           clearInterval(interval);
@@ -285,7 +286,8 @@ function QueueProgress({ logId, onComplete }) {
   const total = log?.recipients?.length || 0;
   const processed = (log?.successCount || 0) + (log?.failCount || 0);
   const percent = total > 0 ? Math.round((processed / total) * 100) : 0;
-  const isDone = log?.status !== 'pending';
+  const s = log?.status;
+  const isDone = s === 'success' || s === 'failed' || s === 'partial';
 
   // SVG Circle calculations
   const radius = 110;
