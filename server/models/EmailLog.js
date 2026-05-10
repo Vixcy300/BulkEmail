@@ -24,7 +24,7 @@ const emailLogSchema = new mongoose.Schema({
   },
   status: {
     type: String,
-    enum: ['success', 'partial', 'failed', 'pending', 'scheduled'],
+    enum: ['success', 'partial', 'failed', 'pending', 'scheduled', 'processing'],
     default: 'success',
   },
   scheduledFor: {
