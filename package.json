@@ -1,0 +1,14 @@
+{
+  "name": "bulkmail-monorepo",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "client",
+    "server"
+  ],
+  "scripts": {
+    "install-all": "npm install --prefix client && npm install --prefix server",
+    "build-client": "cd client && npm install && npm run build",
+    "start-server": "cd server && npm install && node server.js"
+  }
+}
