@@ -19,16 +19,19 @@ const createTransporter = () => {
 let isProcessing = false;
 
 // ─── Process Next Email in Queue ──────────────────────────────────────────────
-const processNext = async () => {
-  if (isProcessing) return;
-  isProcessing = true;
+const processNext = async (specificLogId = null) => {
+  if (isProcessing && !specificLogId) return;
+  if (!specificLogId) isProcessing = true;
 
   try {
-    // Find one pending email log
-    const log = await EmailLog.findOne({ status: 'pending' }).sort({ sentAt: 1 });
+    // Find pending email log
+    let query = { status: 'pending' };
+    if (specificLogId) query._id = specificLogId;
+    
+    const log = await EmailLog.findOne(query).sort({ sentAt: 1 });
     if (!log) {
-      isProcessing = false;
-      return; // Queue is empty
+      if (!specificLogId) isProcessing = false;
+      return; // Queue is empty or log not found
     }
 
     const transporter = createTransporter();
@@ -76,9 +79,11 @@ const processNext = async () => {
   } catch (err) {
     console.error('Queue processing error:', err);
   } finally {
-    isProcessing = false;
-    // Check for more pending emails
-    setTimeout(processNext, 1000); 
+    if (!specificLogId) {
+      isProcessing = false;
+      // Check for more pending emails
+      setTimeout(() => processNext(), 1000); 
+    }
   }
 };
 

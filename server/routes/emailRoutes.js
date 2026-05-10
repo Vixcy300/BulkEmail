@@ -59,11 +59,9 @@ router.post('/send', authMiddleware, async (req, res) => {
       failCount: 0,
     });
 
-    // If it's pending right now, trigger the queue worker
-    if (status === 'pending') {
-      const { triggerQueue } = require('../services/scheduler');
-      triggerQueue();
-    }
+    // We do NOT trigger the background queue here anymore.
+    // The frontend will call /api/email/process/:id immediately after this to 
+    // run the sending in a dedicated Vercel request, keeping the lambda alive.
 
     res.json({
       message: isScheduled 
@@ -76,6 +74,23 @@ router.post('/send', authMiddleware, async (req, res) => {
   } catch (err) {
     console.error('Send email error:', err);
     res.status(500).json({ message: 'Server error while sending emails.', error: err.message });
+  }
+});
+
+// POST /api/email/process/:id  (protected) - Dedicated processing route for Vercel
+router.post('/process/:id', authMiddleware, async (req, res) => {
+  try {
+    const logId = req.params.id;
+    const { triggerQueue } = require('../services/scheduler');
+    
+    // Await the processing of THIS specific log
+    // This keeps the Vercel Lambda alive until the emails are sent!
+    await triggerQueue(logId);
+    
+    res.json({ message: 'Processing complete.' });
+  } catch (err) {
+    console.error('Process error:', err);
+    res.status(500).json({ message: 'Error processing emails.' });
   }
 });
 

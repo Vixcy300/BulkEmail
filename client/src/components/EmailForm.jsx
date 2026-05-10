@@ -246,6 +246,13 @@ function QueueProgress({ logId, onComplete }) {
 
   useEffect(() => {
     let interval;
+    
+    // Trigger the actual sending process on the backend immediately.
+    // On Vercel, this request will stay alive while sending emails.
+    axios.post(`/api/email/process/${logId}`, {}, {
+      headers: { Authorization: `Bearer ${token}` }
+    }).catch(console.error);
+
     const fetchProgress = async () => {
       try {
         const res = await axios.get(`/api/email/history/${logId}`, {
