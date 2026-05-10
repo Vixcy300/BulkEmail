@@ -76,7 +76,7 @@ export default function Navbar() {
             Logout
           </button>
           <div style={{ textAlign: 'center', fontSize: '0.75rem', color: 'var(--text-light)', borderTop: '1px solid var(--border)', paddingTop: '16px' }}>
-            Project by <a href="https://github.com/vignesh" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--text-main)', textDecoration: 'none', fontWeight: '500' }}>Vignesh</a>
+            Project by <a href="https://github.com/Vixcy300" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--text-main)', textDecoration: 'none', fontWeight: '500' }}>Vignesh</a>
           </div>
         </div>
       </aside>

@@ -122,6 +122,10 @@ export default function Login() {
           Username: <code style={{ color: 'var(--accent)' }}>youarenot3admin</code> &nbsp;·&nbsp;
           Password: <code style={{ color: 'var(--accent)' }}>Adminneverletyoupass</code><br />
         </div>
+
+        <div style={{ textAlign: 'center', fontSize: '0.75rem', color: 'var(--text-light)', borderTop: '1px solid var(--border)', paddingTop: '16px', marginTop: '24px' }}>
+          Project by <a href="https://github.com/Vixcy300" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--text-main)', textDecoration: 'none', fontWeight: '500' }}>Vignesh</a>
+        </div>
       </div>
     </div>
   );
