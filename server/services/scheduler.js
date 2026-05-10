@@ -58,8 +58,11 @@ const processNext = async () => {
       log.errorMessage = errors.join(' | ');
       await log.save();
 
-      // Delay 2 seconds between individual emails to prevent rate limiting
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      // Only delay locally. In Vercel (production), we must send as fast as possible 
+      // because the serverless function will be killed soon.
+      if (process.env.NODE_ENV !== 'production') {
+        await new Promise(resolve => setTimeout(resolve, 2000));
+      }
     }
 
     // Update log final status
